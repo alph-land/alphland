@@ -1,0 +1,39 @@
+{
+  "name": "Powfi Dashboard",
+  "description": "A dashboard for the PowFi Round 0 campaign on Alephium: xALPH liquid staking plus the ALPH farming pools. Every number is read live from mainnet in the browser — there is no server or API key.",
+  "short_description": "A dashboard for the PowFi Round 0 campaign on Alephium",
+  "tags": [
+    "Tools",
+    "Analytics"
+  ],
+  "verified": false,
+  "dotw": false,
+  "councils_choice": false,
+  "links": {
+    "website": "https://powfi.notrustverify.ch/",
+    "careers": "",
+    "twitter": "https://x.com/notrustverif",
+    "telegram": "",
+    "discord": "",
+    "docs": "",
+    "github": "https://github.com/notrustverify/powfi-overview",
+    "youtube": "",
+    "medium": "",
+    "mirror": "",
+    "linkedin": ""
+  },
+  "twitterName": "notrustverif",
+  "teamInfo": {
+    "contactEmail": "",
+    "founded": "",
+    "anonymous": true
+  },
+  "media": {
+    "logoUrl": "/dapps/powfi-dashboard/powfi-dashboard-logo.webp",
+    "bannerUrl": "/dapps/powfi-dashboard/powfi-dashboard-banner.webp",
+    "previewUrl": "/dapps/powfi-dashboard/powfi-dashboard-preview.webp"
+  },
+  "contracts": [],
+  "audits": [],
+  "tokens": []
+}
