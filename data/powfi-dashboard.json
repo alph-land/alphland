@@ -1,5 +1,5 @@
 {
-  "name": "Powfi Dashboard",
+  "name": "Powfi Community Dashboard",
   "description": "A dashboard for the PowFi Round 0 campaign on Alephium: xALPH liquid staking plus the ALPH farming pools. Every number is read live from mainnet in the browser — there is no server or API key.",
   "short_description": "A dashboard for the PowFi Round 0 campaign on Alephium",
   "tags": [
