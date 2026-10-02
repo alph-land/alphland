@@ -1,0 +1,40 @@
+{
+  "name": "Blockflow Index",
+  "description": "Blockflow Index is the price index for Alephium. It reads every pool on every DEX (Elexium, Ayin and Powfi) and publishes, for each token, a mid price, the executable depth behind it and a confidence score, live and with hourly history.\n\nSwap at the best price. The built-in swap routes each trade across all three DEXes, splits it where that returns more, shows what every DEX would pay beside its own route, and is signed in your own wallet. A swap here never leaves less than the best single DEX.\n\nFor builders. The swap is a free widget: one line of HTML on any site, opening straight on your token. The premium API serves prices, depth, confidence, pools and full history by token id.\n\nWhat you get:\n- Prices for every Alephium token with a tradeable market, keyed by token id\n- Depth: how much can be traded within 1% and 5% of the mid price\n- Price and depth history charts, shareable as links and cards\n- Best-price swaps across Elexium, Ayin and Powfi, with the network fee counted\n- A swap widget for your own site\n- A premium API with an OpenAPI reference",
+  "short_description": "Alephium token prices, depth and best-price swaps",
+  "tags": [
+    "Analytics",
+    "DeFi",
+    "Tools"
+  ],
+  "verified": false,
+  "dotw": false,
+  "councils_choice": false,
+  "links": {
+    "website": "https://blockflowindex.com",
+    "careers": "",
+    "twitter": "https://x.com/blockflowindex",
+    "telegram": "",
+    "discord": "",
+    "docs": "https://blockflowindex.com/docs",
+    "github": "",
+    "youtube": "",
+    "medium": "",
+    "mirror": "",
+    "linkedin": ""
+  },
+  "twitterName": "blockflowindex",
+  "teamInfo": {
+    "contactEmail": "",
+    "founded": "",
+    "anonymous": false
+  },
+  "media": {
+    "logoUrl": "/dapps/blockflow-index/blockflow-index-logo.webp",
+    "bannerUrl": "/dapps/blockflow-index/blockflow-index-banner.webp",
+    "previewUrl": "/dapps/blockflow-index/blockflow-index-preview.webp"
+  },
+  "contracts": [],
+  "audits": [],
+  "tokens": []
+}
