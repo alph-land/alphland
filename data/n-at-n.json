@@ -1,0 +1,38 @@
+{
+  "name": "Nóatún",
+  "description": "Nóatún is a ve(3,3) exchange for wRATR on Alephium — the harbour where wRATR's price of record is set.\n\nTrade wRATR against ALPH, dollars or xALPH. Lock wRATR for a share of every trade's fee and the vote that steers where emissions go. Add liquidity, stake it in the gauge, and earn the weekly stream.\n\nWhat makes it different: the emissions mint nothing. There is no protocol token, and nothing in the contracts can issue one — every wRATR paid out was mined first on RATR's own proof-of-work chain, funded from the Ratatoskr masternode fleet's income. The weekly stream tapers 1% an epoch against a fixed lifetime cap, and the contract that books it has no drain, no owner withdrawal, and no way to raise a week's budget above what is already in the pot.\n\nEvery figure on the dashboard is read live from the chain, depth included. None of them is a promise.",
+  "short_description": "ve(3,3) DEX for wRATR, paid by masternodes.",
+  "tags": [
+    "DeFi"
+  ],
+  "verified": false,
+  "dotw": false,
+  "councils_choice": false,
+  "links": {
+    "website": "https://noatun.enchantedforestdefi.com",
+    "careers": "",
+    "twitter": "https://x.com/HeimdallRATR",
+    "telegram": "",
+    "discord": "https://discord.com/invite/SrffQVYqee",
+    "docs": "https://docs.enchantedforestdefi.com/",
+    "github": "https://github.com/EnchantedForestDeFi",
+    "youtube": "",
+    "medium": "",
+    "mirror": "",
+    "linkedin": ""
+  },
+  "twitterName": "HeimdallRATR",
+  "teamInfo": {
+    "contactEmail": "NexusAether@proton.me",
+    "founded": "2026-06-01T00:00:00.000Z",
+    "anonymous": true
+  },
+  "media": {
+    "logoUrl": "/dapps/n-at-n/n-at-n-logo.webp",
+    "bannerUrl": "/dapps/n-at-n/n-at-n-banner.webp",
+    "previewUrl": "/dapps/n-at-n/n-at-n-preview.webp"
+  },
+  "contracts": [],
+  "audits": [],
+  "tokens": []
+}
