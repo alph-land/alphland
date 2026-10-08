@@ -1,0 +1,38 @@
+{
+  "name": "Neuronto Payments",
+  "description": "Neuronto Payments is an x402 facilitator: it verifies signed USDC payments and settles them on Base, so any API, MCP tool or AI agent can charge per request and any agent can pay with a wallet and no account. Its gateway puts an existing HTTPS API behind x402 without changing its code, with buyers paying the seller's wallet directly. It never holds anyone's money, screens addresses against the OFAC list and publishes its observed availability.",
+  "short_description": "x402 payments: charge for any API or AI agent call in USDC",
+  "tags": [
+    "Infrastructure"
+  ],
+  "verified": false,
+  "dotw": false,
+  "councils_choice": false,
+  "links": {
+    "website": "https://pay.neuronto.com",
+    "careers": "",
+    "twitter": "",
+    "telegram": "",
+    "discord": "",
+    "docs": "https://pay.neuronto.com/developers",
+    "github": "",
+    "youtube": "",
+    "medium": "",
+    "mirror": "",
+    "linkedin": ""
+  },
+  "twitterName": "",
+  "teamInfo": {
+    "contactEmail": "hello@neuronto.com",
+    "founded": "",
+    "anonymous": false
+  },
+  "media": {
+    "logoUrl": "/dapps/neuronto-payments/neuronto-payments-logo.webp",
+    "bannerUrl": "/dapps/neuronto-payments/neuronto-payments-banner.webp",
+    "previewUrl": "/dapps/neuronto-payments/neuronto-payments-preview.webp"
+  },
+  "contracts": [],
+  "audits": [],
+  "tokens": []
+}
