@@ -1,0 +1,39 @@
+{
+  "name": "KarmALPH",
+  "description": "KarmALPH turns Alephium hashrate into funding for real ecosystem projects. Support builders with hashrate donation while earning KARMA rewards.",
+  "short_description": "Donate hashrate to good use.",
+  "tags": [
+    "Mining",
+    "DeFi"
+  ],
+  "verified": false,
+  "dotw": false,
+  "councils_choice": false,
+  "links": {
+    "website": "https://www.karmalph.com/",
+    "careers": "",
+    "twitter": "https://x.com/AlphKarma",
+    "telegram": "https://t.me/KarmAlph",
+    "discord": "",
+    "docs": "",
+    "github": "",
+    "youtube": "",
+    "medium": "",
+    "mirror": "",
+    "linkedin": ""
+  },
+  "twitterName": "",
+  "teamInfo": {
+    "contactEmail": "minijudie@imsorry.dev",
+    "founded": "2026-10-05T00:00:00.000Z",
+    "anonymous": false
+  },
+  "media": {
+    "logoUrl": "/dapps/karmalph/karmalph-logo.webp",
+    "bannerUrl": "/dapps/karmalph/karmalph-banner.webp",
+    "previewUrl": "/dapps/karmalph/karmalph-preview.webp"
+  },
+  "contracts": [],
+  "audits": [],
+  "tokens": []
+}
