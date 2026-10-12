@@ -1,0 +1,38 @@
+{
+  "name": "synefields",
+  "description": "synefields is a room for your daily 5-minute (box) breathing routine. Explore 6 different worlds to breathe in on your journey to calmness.\n\nThe additional NFT collection offers 80 unique breathing fields – sixteen in each of five worlds. Each field has its own bespoke audio, colour palette and movement.",
+  "short_description": "synefields is a room for your daily breathing routine.",
+  "tags": [
+    "NFTs"
+  ],
+  "verified": false,
+  "dotw": false,
+  "councils_choice": false,
+  "links": {
+    "website": "https://synefields.com",
+    "careers": "",
+    "twitter": "",
+    "telegram": "",
+    "discord": "",
+    "docs": "",
+    "github": "",
+    "youtube": "",
+    "medium": "",
+    "mirror": "",
+    "linkedin": ""
+  },
+  "twitterName": "",
+  "teamInfo": {
+    "contactEmail": "",
+    "founded": "2026-10-12T00:00:00.000Z",
+    "anonymous": true
+  },
+  "media": {
+    "logoUrl": "/dapps/synefields/synefields-logo.webp",
+    "bannerUrl": "/dapps/synefields/synefields-banner.webp",
+    "previewUrl": "/dapps/synefields/synefields-preview.webp"
+  },
+  "contracts": [],
+  "audits": [],
+  "tokens": []
+}
