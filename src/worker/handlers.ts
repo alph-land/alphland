@@ -2771,6 +2771,7 @@ export async function handleBookmarksAPI(
           bo.reward_currency,
           bo.reward_type,
           bo.reward_usd,
+          bo.denomination,
           bo.status,
           bo.end_date,
           bo.sponsor_id,

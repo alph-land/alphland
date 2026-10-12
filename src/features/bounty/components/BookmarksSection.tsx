@@ -1,7 +1,7 @@
 "use client";
 
 import { apiClient } from "@/lib/api-client";
-import { sponsorSlug } from "../utils";
+import { formatBountyReward, sponsorSlug } from "../utils";
 import {
   Bookmark,
   Calendar,
@@ -24,6 +24,8 @@ interface BookmarkItem {
   title: string;
   reward_amount: number;
   reward_currency: string;
+  reward_usd?: number | null;
+  denomination?: "alph" | "usd";
   status: string;
   end_date: string;
   sponsor_name: string;
@@ -228,7 +230,12 @@ export function BookmarksSection({
                       {/* Reward */}
                       <div className="flex items-center gap-1 text-accessible-green font-semibold">
                         <DollarSign className="w-3 h-3" />
-                        {bookmark.reward_amount} {bookmark.reward_currency}
+                        {formatBountyReward({
+                          denomination: bookmark.denomination,
+                          amount: bookmark.reward_amount,
+                          token: bookmark.reward_currency,
+                          usd: bookmark.reward_usd,
+                        })}
                       </div>
 
                       {/* End Date */}

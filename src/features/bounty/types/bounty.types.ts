@@ -24,6 +24,8 @@ export interface Bounty {
   deliverables: string[];
   skills: string[];
   reward: Reward;
+  /** Which side the sponsor fixed: "usd" means reward.usd_equivalent is the promise. */
+  denomination?: "alph" | "usd";
   reward_type: RewardType;
   tier_count?: number;
   tiered_rewards?: TieredReward[];

@@ -3,7 +3,7 @@ import type { Sponsor } from "../types/sponsor.types";
 import type { Submission } from "../types/submission.types";
 import { SubmissionReviewModal } from "../components/SubmissionReviewModal";
 import { BountySubmission } from "@/lib/api-client";
-import { submissionTitle } from "../utils";
+import { formatBountyReward, submissionTitle } from "../utils";
 import {
   getBountyDisplayStatus,
   type BountyDisplayStatus,
@@ -450,6 +450,7 @@ export default function SponsorDashboard() {
             token: b.reward_currency || "ALPH",
             usd_equivalent: Number(b.reward_usd) || 0,
           },
+          denomination: b.denomination === "usd" ? "usd" : "alph",
           reward_type: b.reward_type || "fixed",
           tier_count: b.tier_count || null,
           category: b.category || "Development",
@@ -1317,7 +1318,12 @@ export default function SponsorDashboard() {
                             </div>
                             <div className="flex items-center justify-between sm:flex-col sm:items-end gap-4">
                               <div className="font-semibold text-orange font-barlow">
-                                {bounty.reward.amount} {bounty.reward.token}
+                                {formatBountyReward({
+                                  denomination: bounty.denomination,
+                                  amount: bounty.reward.amount,
+                                  token: bounty.reward.token,
+                                  usd: bounty.reward.usd_equivalent,
+                                })}
                               </div>
                               <div className="flex gap-2">
                                 {bountyStatusOf(bounty) === "Draft" ||
