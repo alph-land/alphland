@@ -2,10 +2,7 @@
   "name": "Alephium Mirrors",
   "description": "Alephium Mirrors is a directory of community-hosted alternative frontends for Alephium ecosystem applications. When an official dApp frontend becomes unavailable — due to domain seizure, DNS issues, regulatory pressure, or technical failure — a mirror frontend allows users to continue interacting with the underlying smart contracts.",
   "short_description": "Directory of mirror frontends for Alephium dApps",
-  "tags": [
-    "DeFi",
-    "Tools"
-  ],
+  "tags": ["DeFi", "Tools"],
   "verified": false,
   "dotw": false,
   "councils_choice": false,
@@ -24,7 +21,7 @@
   },
   "twitterName": "",
   "teamInfo": {
-    "contactEmail": "minijudie@imsorry.dev",
+    "contactEmail": "",
     "founded": "2026-03-01T00:00:00.000Z",
     "anonymous": true
   },

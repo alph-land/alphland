@@ -2,10 +2,7 @@
   "name": "KarmALPH",
   "description": "KarmALPH turns Alephium hashrate into funding for real ecosystem projects. Support builders with hashrate donation while earning KARMA rewards.",
   "short_description": "Donate hashrate to good use.",
-  "tags": [
-    "Mining",
-    "DeFi"
-  ],
+  "tags": ["Mining", "DeFi"],
   "verified": false,
   "dotw": false,
   "councils_choice": false,
@@ -24,7 +21,7 @@
   },
   "twitterName": "",
   "teamInfo": {
-    "contactEmail": "minijudie@imsorry.dev",
+    "contactEmail": "",
     "founded": "2026-10-05T00:00:00.000Z",
     "anonymous": false
   },
