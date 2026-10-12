@@ -3952,7 +3952,8 @@ export async function handleSubmitDappAPI(
       },
       twitterName: body.twitterName?.trim() ?? "",
       teamInfo: {
-        contactEmail: teamInfo.contactEmail?.trim() ?? "",
+        // The PR and data file are public; never commit the submitter's email.
+        contactEmail: "",
         founded: foundedRaw ? `${foundedRaw}T00:00:00.000Z` : "",
         anonymous: teamInfo.anonymous ?? false,
       },
@@ -4002,7 +4003,7 @@ ${body.description}
 | Docs | ${links.docs || "-"} |
 
 ### Team Info
-- **Contact Email:** ${teamInfo.contactEmail || "Not provided"}
+- **Contact Email:** ${teamInfo.contactEmail?.trim() ? "Provided (withheld from public PR)" : "Not provided"}
 - **Anonymous Team:** ${teamInfo.anonymous ? "Yes" : "No"}
 
 ---
