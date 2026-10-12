@@ -2297,12 +2297,28 @@ export async function handleNotificationsAPI(
 ): Promise<Response> {
   const pathname = url.pathname;
 
+  // Every route here reads or changes one user's notifications, so all of
+  // them need a session; POST additionally requires god (checked below).
+  const sessionUserId = await getSessionUserId(env, request);
+  if (!sessionUserId) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401,
+      headers: corsHeaders,
+    });
+  }
+  const forbidden = () =>
+    new Response(JSON.stringify({ error: "Forbidden" }), {
+      status: 403,
+      headers: corsHeaders,
+    });
+
   // GET /api/notifications/user/:userId - Get user's notifications
   if (
     request.method === "GET" &&
     pathname.match(/^\/api\/notifications\/user\/[^/]+$/)
   ) {
     const userId = pathname.split("/").pop();
+    if (userId !== sessionUserId) return forbidden();
     const limit = parseInt(url.searchParams.get("limit") || "20");
     const unreadOnly = url.searchParams.get("unread_only") === "true";
 
@@ -2338,19 +2354,7 @@ export async function handleNotificationsAPI(
     // change they describe (see notifications.ts). This endpoint used to accept
     // an arbitrary user_id/title/message/link from anyone, which made it a
     // ready-made phishing channel; it is now god-only and kept for admin use.
-    const sessionUserId = await getSessionUserId(env, request);
-    if (!sessionUserId) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), {
-        status: 401,
-        headers: corsHeaders,
-      });
-    }
-    if (!(await isGodUser(env, sessionUserId))) {
-      return new Response(JSON.stringify({ error: "Forbidden" }), {
-        status: 403,
-        headers: corsHeaders,
-      });
-    }
+    if (!(await isGodUser(env, sessionUserId))) return forbidden();
 
     const body = (await request.json()) as any;
 
@@ -2419,9 +2423,9 @@ export async function handleNotificationsAPI(
 
     const now = Math.floor(Date.now() / 1000);
     await env.DB.prepare(
-      `UPDATE notifications SET read = 1, read_at = ? WHERE id = ?`,
+      `UPDATE notifications SET read = 1, read_at = ? WHERE id = ? AND user_id = ?`,
     )
-      .bind(now, id)
+      .bind(now, id, sessionUserId)
       .run();
 
     return new Response(JSON.stringify({ success: true }), {
@@ -2435,6 +2439,7 @@ export async function handleNotificationsAPI(
     pathname.match(/^\/api\/notifications\/user\/[^/]+\/read-all$/)
   ) {
     const userId = pathname.split("/").slice(-2)[0];
+    if (userId !== sessionUserId) return forbidden();
 
     const now = Math.floor(Date.now() / 1000);
     await env.DB.prepare(
@@ -2455,8 +2460,10 @@ export async function handleNotificationsAPI(
   ) {
     const id = pathname.split("/").pop();
 
-    await env.DB.prepare(`DELETE FROM notifications WHERE id = ?`)
-      .bind(id)
+    await env.DB.prepare(
+      `DELETE FROM notifications WHERE id = ? AND user_id = ?`,
+    )
+      .bind(id, sessionUserId)
       .run();
 
     return new Response(JSON.stringify({ success: true }), {
