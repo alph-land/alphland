@@ -104,7 +104,7 @@ describe("approving a submission writes structured columns", () => {
       reward_amount: 305,
       reward_currency: "ALPH",
       reward_usd: 18,
-      transaction_hash: "tx1",
+      transaction_hash: "1".repeat(64),
       reviewer_notes: "Nice work",
     });
 
@@ -126,7 +126,7 @@ describe("approving a submission writes structured columns", () => {
       winner_position: 1,
       reward_amount: 100,
       reward_usd: 5,
-      transaction_hash: "tx2",
+      transaction_hash: "2".repeat(64),
       reviewer_notes: "Nice work",
     });
 
@@ -140,7 +140,7 @@ describe("approving a submission writes structured columns", () => {
       status: "approved",
       winner_position: 1,
       reward_amount: 100,
-      transaction_hash: "tx3",
+      transaction_hash: "3".repeat(64),
     });
     expect(cols()[COL.isPaid]).toBe(1);
     expect(cols()[COL.paidAt]).toBeTypeOf("number");
@@ -189,7 +189,7 @@ describe("non-approved outcomes do not create a winner", () => {
     const { env, cols } = makeEnv();
     await review(env, {
       status: "rejected",
-      transaction_hash: "hash-meant-for-the-winner",
+      transaction_hash: "f".repeat(64),
     });
     expect(cols()[COL.txHash]).toBeNull();
   });

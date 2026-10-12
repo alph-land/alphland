@@ -524,6 +524,22 @@ export async function handleSubmissionsAPI(
     const body = (await request.json()) as any;
     const now = Math.floor(Date.now() / 1000);
 
+    // Canonicalise before anything reads it. The explorer accepts any case,
+    // so storing the hash as typed let "ABC…" and "abc…" — one payment —
+    // both pass the unique index (028) and mark two submissions paid.
+    if (body.transaction_hash !== undefined && body.transaction_hash !== null) {
+      const hash = String(body.transaction_hash).trim().toLowerCase();
+      if (hash !== "" && !/^[0-9a-f]{64}$/.test(hash)) {
+        return new Response(
+          JSON.stringify({
+            error: "transaction_hash must be a 64-character hex string",
+          }),
+          { status: 400, headers: corsHeaders },
+        );
+      }
+      body.transaction_hash = hash || null;
+    }
+
     const ALLOWED_REVIEW_STATUSES = [
       "approved",
       "rejected",
