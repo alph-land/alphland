@@ -142,7 +142,9 @@ function transformBounty(bounty: any) {
     reward: {
       amount: bounty.reward_amount || 0,
       token: bounty.reward_currency || "ALPH",
-      usd_equivalent: bounty.reward_usd_value || 0,
+      // reward_usd, not the hand-typed reward_usd_value, which is 0 for
+      // every bounty since 025 — same as transformBounty in index.ts.
+      usd_equivalent: bounty.reward_usd || 0,
     },
   };
 }
@@ -2768,7 +2770,7 @@ export async function handleBookmarksAPI(
           bo.reward_amount,
           bo.reward_currency,
           bo.reward_type,
-          bo.reward_usd_value,
+          bo.reward_usd,
           bo.status,
           bo.end_date,
           bo.sponsor_id,
@@ -2790,7 +2792,7 @@ export async function handleBookmarksAPI(
         reward: {
           amount: b.reward_amount || 0,
           token: b.reward_currency || "ALPH",
-          usd_equivalent: b.reward_usd_value || 0,
+          usd_equivalent: b.reward_usd || 0,
         },
       }));
 
