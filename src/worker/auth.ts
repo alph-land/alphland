@@ -39,6 +39,32 @@ export interface AuthEnv {
 }
 
 /**
+ * Origins allowed to make credentialed requests: better-auth's CSRF check and
+ * the Worker's CORS headers both read this, so the two cannot drift apart.
+ */
+export function getTrustedOrigins(
+  env: Pick<AuthEnv, "APP_URL" | "BETTER_AUTH_URL">,
+): string[] {
+  const publicUrl =
+    env.APP_URL || env.BETTER_AUTH_URL || "http://localhost:3000";
+  return [publicUrl, "https://alph.land", "https://www.alph.land"];
+}
+
+/**
+ * Access-Control-Allow-Origin for a credentialed response. Echoes the
+ * request's Origin only when it is trusted; reflecting any Origin alongside
+ * Allow-Credentials would let any site read a logged-in user's responses.
+ */
+export function corsOriginFor(
+  request: Request,
+  env: Pick<AuthEnv, "APP_URL" | "BETTER_AUTH_URL">,
+): string {
+  const trusted = getTrustedOrigins(env);
+  const origin = request.headers.get("Origin");
+  return origin && trusted.includes(origin) ? origin : trusted[0];
+}
+
+/**
  * Create auth instance with D1 database
  * Must be called within request context where D1 binding is available
  * @param ctx - ExecutionContext for background tasks (email sending)
@@ -309,7 +335,7 @@ export function createAuth(
 
     baseURL: publicUrl,
     secret: env.BETTER_AUTH_SECRET,
-    trustedOrigins: [publicUrl, "https://alph.land", "https://www.alph.land"],
+    trustedOrigins: getTrustedOrigins(env),
 
     // TODO: Re-enable account settings when we have a real production domain
     // Currently commented out to avoid cookie/state issues in preview domains

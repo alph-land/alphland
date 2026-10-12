@@ -2,7 +2,7 @@
  * Cloudflare Worker for Alphland API
  * This worker handles API requests and connects to D1 database
  */
-import { createAuth } from "./auth";
+import { createAuth, corsOriginFor } from "./auth";
 import { notifySponsorAccountChange } from "./email";
 import { notifySponsorStatusChanged } from "./notifications";
 import { verifySignedMessage } from "@alephium/web3";
@@ -64,15 +64,11 @@ const worker = {
   async fetch(request: Request, env: Env, _ctx: any): Promise<Response> {
     const url = new URL(request.url);
 
-    // Get the origin from the request or use the configured frontend URL
-    const requestOrigin = request.headers.get("Origin");
-    const allowedOrigin =
-      env.APP_URL || env.BETTER_AUTH_URL || "http://localhost:3000";
-
-    // CORS headers - must allow credentials for cookie-based auth
+    // CORS headers - must allow credentials for cookie-based auth, so the
+    // origin is one of ours, never whatever the request claims
     const corsHeaders = {
-      // Use specific origin instead of "*" to allow credentials
-      "Access-Control-Allow-Origin": requestOrigin || allowedOrigin,
+      "Access-Control-Allow-Origin": corsOriginFor(request, env),
+      Vary: "Origin",
       "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
       "Access-Control-Allow-Headers": "Content-Type, Authorization, Cookie",
       "Access-Control-Allow-Credentials": "true", // Required for cookies
@@ -2550,16 +2546,9 @@ async function handleUsersAPI(
   url: URL,
   ctx?: any,
 ): Promise<Response> {
-  // Get the origin from the request for CORS
-  const requestOrigin = request.headers.get("Origin");
-  const allowedOrigin =
-    requestOrigin ||
-    env.APP_URL ||
-    env.BETTER_AUTH_URL ||
-    "http://localhost:3000";
-
   const corsHeaders = {
-    "Access-Control-Allow-Origin": allowedOrigin,
+    "Access-Control-Allow-Origin": corsOriginFor(request, env),
+    Vary: "Origin",
     "Access-Control-Allow-Credentials": "true",
     "Content-Type": "application/json",
   };
