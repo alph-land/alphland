@@ -142,7 +142,9 @@ function transformBounty(bounty: any) {
     reward: {
       amount: bounty.reward_amount || 0,
       token: bounty.reward_currency || "ALPH",
-      usd_equivalent: bounty.reward_usd_value || 0,
+      // reward_usd, not the hand-typed reward_usd_value, which is 0 for
+      // every bounty since 025 — same as transformBounty in index.ts.
+      usd_equivalent: bounty.reward_usd || 0,
     },
   };
 }
@@ -523,6 +525,22 @@ export async function handleSubmissionsAPI(
     const id = pathname.split("/").pop();
     const body = (await request.json()) as any;
     const now = Math.floor(Date.now() / 1000);
+
+    // Canonicalise before anything reads it. The explorer accepts any case,
+    // so storing the hash as typed let "ABC…" and "abc…" — one payment —
+    // both pass the unique index (028) and mark two submissions paid.
+    if (body.transaction_hash !== undefined && body.transaction_hash !== null) {
+      const hash = String(body.transaction_hash).trim().toLowerCase();
+      if (hash !== "" && !/^[0-9a-f]{64}$/.test(hash)) {
+        return new Response(
+          JSON.stringify({
+            error: "transaction_hash must be a 64-character hex string",
+          }),
+          { status: 400, headers: corsHeaders },
+        );
+      }
+      body.transaction_hash = hash || null;
+    }
 
     const ALLOWED_REVIEW_STATUSES = [
       "approved",
@@ -2297,12 +2315,28 @@ export async function handleNotificationsAPI(
 ): Promise<Response> {
   const pathname = url.pathname;
 
+  // Every route here reads or changes one user's notifications, so all of
+  // them need a session; POST additionally requires god (checked below).
+  const sessionUserId = await getSessionUserId(env, request);
+  if (!sessionUserId) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401,
+      headers: corsHeaders,
+    });
+  }
+  const forbidden = () =>
+    new Response(JSON.stringify({ error: "Forbidden" }), {
+      status: 403,
+      headers: corsHeaders,
+    });
+
   // GET /api/notifications/user/:userId - Get user's notifications
   if (
     request.method === "GET" &&
     pathname.match(/^\/api\/notifications\/user\/[^/]+$/)
   ) {
     const userId = pathname.split("/").pop();
+    if (userId !== sessionUserId) return forbidden();
     const limit = parseInt(url.searchParams.get("limit") || "20");
     const unreadOnly = url.searchParams.get("unread_only") === "true";
 
@@ -2338,19 +2372,7 @@ export async function handleNotificationsAPI(
     // change they describe (see notifications.ts). This endpoint used to accept
     // an arbitrary user_id/title/message/link from anyone, which made it a
     // ready-made phishing channel; it is now god-only and kept for admin use.
-    const sessionUserId = await getSessionUserId(env, request);
-    if (!sessionUserId) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), {
-        status: 401,
-        headers: corsHeaders,
-      });
-    }
-    if (!(await isGodUser(env, sessionUserId))) {
-      return new Response(JSON.stringify({ error: "Forbidden" }), {
-        status: 403,
-        headers: corsHeaders,
-      });
-    }
+    if (!(await isGodUser(env, sessionUserId))) return forbidden();
 
     const body = (await request.json()) as any;
 
@@ -2419,9 +2441,9 @@ export async function handleNotificationsAPI(
 
     const now = Math.floor(Date.now() / 1000);
     await env.DB.prepare(
-      `UPDATE notifications SET read = 1, read_at = ? WHERE id = ?`,
+      `UPDATE notifications SET read = 1, read_at = ? WHERE id = ? AND user_id = ?`,
     )
-      .bind(now, id)
+      .bind(now, id, sessionUserId)
       .run();
 
     return new Response(JSON.stringify({ success: true }), {
@@ -2435,6 +2457,7 @@ export async function handleNotificationsAPI(
     pathname.match(/^\/api\/notifications\/user\/[^/]+\/read-all$/)
   ) {
     const userId = pathname.split("/").slice(-2)[0];
+    if (userId !== sessionUserId) return forbidden();
 
     const now = Math.floor(Date.now() / 1000);
     await env.DB.prepare(
@@ -2455,8 +2478,10 @@ export async function handleNotificationsAPI(
   ) {
     const id = pathname.split("/").pop();
 
-    await env.DB.prepare(`DELETE FROM notifications WHERE id = ?`)
-      .bind(id)
+    await env.DB.prepare(
+      `DELETE FROM notifications WHERE id = ? AND user_id = ?`,
+    )
+      .bind(id, sessionUserId)
       .run();
 
     return new Response(JSON.stringify({ success: true }), {
@@ -2745,7 +2770,8 @@ export async function handleBookmarksAPI(
           bo.reward_amount,
           bo.reward_currency,
           bo.reward_type,
-          bo.reward_usd_value,
+          bo.reward_usd,
+          bo.denomination,
           bo.status,
           bo.end_date,
           bo.sponsor_id,
@@ -2767,7 +2793,7 @@ export async function handleBookmarksAPI(
         reward: {
           amount: b.reward_amount || 0,
           token: b.reward_currency || "ALPH",
-          usd_equivalent: b.reward_usd_value || 0,
+          usd_equivalent: b.reward_usd || 0,
         },
       }));
 
@@ -3952,7 +3978,8 @@ export async function handleSubmitDappAPI(
       },
       twitterName: body.twitterName?.trim() ?? "",
       teamInfo: {
-        contactEmail: teamInfo.contactEmail?.trim() ?? "",
+        // The PR and data file are public; never commit the submitter's email.
+        contactEmail: "",
         founded: foundedRaw ? `${foundedRaw}T00:00:00.000Z` : "",
         anonymous: teamInfo.anonymous ?? false,
       },
@@ -4002,7 +4029,7 @@ ${body.description}
 | Docs | ${links.docs || "-"} |
 
 ### Team Info
-- **Contact Email:** ${teamInfo.contactEmail || "Not provided"}
+- **Contact Email:** ${teamInfo.contactEmail?.trim() ? "Provided (withheld from public PR)" : "Not provided"}
 - **Anonymous Team:** ${teamInfo.anonymous ? "Yes" : "No"}
 
 ---

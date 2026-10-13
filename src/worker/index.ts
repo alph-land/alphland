@@ -2,7 +2,7 @@
  * Cloudflare Worker for Alphland API
  * This worker handles API requests and connects to D1 database
  */
-import { createAuth } from "./auth";
+import { createAuth, corsOriginFor } from "./auth";
 import { notifySponsorAccountChange } from "./email";
 import { notifySponsorStatusChanged } from "./notifications";
 import { verifySignedMessage } from "@alephium/web3";
@@ -64,15 +64,11 @@ const worker = {
   async fetch(request: Request, env: Env, _ctx: any): Promise<Response> {
     const url = new URL(request.url);
 
-    // Get the origin from the request or use the configured frontend URL
-    const requestOrigin = request.headers.get("Origin");
-    const allowedOrigin =
-      env.APP_URL || env.BETTER_AUTH_URL || "http://localhost:3000";
-
-    // CORS headers - must allow credentials for cookie-based auth
+    // CORS headers - must allow credentials for cookie-based auth, so the
+    // origin is one of ours, never whatever the request claims
     const corsHeaders = {
-      // Use specific origin instead of "*" to allow credentials
-      "Access-Control-Allow-Origin": requestOrigin || allowedOrigin,
+      "Access-Control-Allow-Origin": corsOriginFor(request, env),
+      Vary: "Origin",
       "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
       "Access-Control-Allow-Headers": "Content-Type, Authorization, Cookie",
       "Access-Control-Allow-Credentials": "true", // Required for cookies
@@ -2505,6 +2501,43 @@ async function handleBountiesAPI(
 }
 
 /**
+ * How much of a profile the requester may see. Profiles are public pages, but
+ * email and wallet_address are not: "full" is the owner or a god user, and
+ * "sponsor" is a sponsor whose bounty this user submitted to (they need the
+ * wallet to pay a winner, see SubmissionReviewModal). Everyone else is "public".
+ */
+async function getProfileAccess(
+  env: Env,
+  request: Request,
+  targetUserId: string,
+): Promise<"full" | "sponsor" | "public"> {
+  const sessionUserId = await getSessionUserId(env, request);
+  if (!sessionUserId) return "public";
+  if (sessionUserId === targetUserId) return "full";
+  if (await isGodUser(env, sessionUserId)) return "full";
+  const sponsorOf = await env.DB.prepare(
+    `SELECT 1 FROM bounty_submissions bs
+       JOIN bounties b ON bs.bounty_id = b.id
+       JOIN sponsors s ON b.sponsor_id = s.id
+      WHERE bs.user_id = ? AND s.user_id = ?
+      LIMIT 1`,
+  )
+    .bind(targetUserId, sessionUserId)
+    .first();
+  return sponsorOf ? "sponsor" : "public";
+}
+
+/** Strips the fields the requester is not entitled to (see getProfileAccess). */
+function redactProfile(
+  user: Record<string, any>,
+  access: "full" | "sponsor" | "public",
+): Record<string, any> {
+  if (access === "full") return user;
+  const { email, wallet_address, ...rest } = user;
+  return access === "sponsor" ? { ...rest, wallet_address } : rest;
+}
+
+/**
  * Handle Users API requests
  */
 async function handleUsersAPI(
@@ -2513,16 +2546,9 @@ async function handleUsersAPI(
   url: URL,
   ctx?: any,
 ): Promise<Response> {
-  // Get the origin from the request for CORS
-  const requestOrigin = request.headers.get("Origin");
-  const allowedOrigin =
-    requestOrigin ||
-    env.APP_URL ||
-    env.BETTER_AUTH_URL ||
-    "http://localhost:3000";
-
   const corsHeaders = {
-    "Access-Control-Allow-Origin": allowedOrigin,
+    "Access-Control-Allow-Origin": corsOriginFor(request, env),
+    Vary: "Origin",
     "Access-Control-Allow-Credentials": "true",
     "Content-Type": "application/json",
   };
@@ -2574,9 +2600,15 @@ async function handleUsersAPI(
         blockchain_skills: null,
       };
 
-      return new Response(JSON.stringify({ user: transformedUser }), {
-        headers: corsHeaders,
-      });
+      const access = await getProfileAccess(
+        env,
+        request,
+        user.user_id as string,
+      );
+      return new Response(
+        JSON.stringify({ user: redactProfile(transformedUser, access) }),
+        { headers: corsHeaders },
+      );
     } catch (error: any) {
       console.error("Error fetching user by username:", error);
       return new Response(
@@ -2723,7 +2755,9 @@ async function handleUsersAPI(
     try {
       const id = pathname.split("/").pop();
 
-      let user = await env.DB.prepare(
+      // No create-on-miss here: this route is unauthenticated, and
+      // /api/users/me already creates the caller's own profile.
+      const user = await env.DB.prepare(
         `SELECT
           up.*,
           u.email,
@@ -2736,30 +2770,11 @@ async function handleUsersAPI(
         .bind(id)
         .first();
 
-      // If user profile doesn't exist, create it
       if (!user) {
-        const profileId = crypto.randomUUID();
-        const now = Math.floor(Date.now() / 1000);
-
-        await env.DB.prepare(
-          `INSERT INTO user_profiles (id, user_id, created_at, updated_at)
-           VALUES (?, ?, ?, ?)`,
-        )
-          .bind(profileId, id, now, now)
-          .run();
-
-        user = await env.DB.prepare(
-          `SELECT
-            up.*,
-            u.email,
-            u.name,
-            u.image
-           FROM user_profiles up
-           JOIN user u ON up.user_id = u.id
-           WHERE up.user_id = ?`,
-        )
-          .bind(id)
-          .first();
+        return new Response(JSON.stringify({ error: "User not found" }), {
+          status: 404,
+          headers: corsHeaders,
+        });
       }
 
       // Transform data to match frontend expectations
@@ -2778,9 +2793,11 @@ async function handleUsersAPI(
         blockchain_skills: null,
       };
 
-      return new Response(JSON.stringify({ user: transformedUser }), {
-        headers: corsHeaders,
-      });
+      const access = await getProfileAccess(env, request, id as string);
+      return new Response(
+        JSON.stringify({ user: redactProfile(transformedUser, access) }),
+        { headers: corsHeaders },
+      );
     } catch (error: any) {
       console.error("Error fetching user by id:", error);
       return new Response(
@@ -2912,6 +2929,23 @@ async function handleUsersAPI(
   if (request.method === "PUT" && pathname.match(/^\/api\/users\/[^/]+$/)) {
     try {
       const id = pathname.split("/").pop();
+
+      // Only the owner may edit a profile. wallet_address is what bounty
+      // payouts are verified against, so this must never be open.
+      const sessionUserId = await getSessionUserId(env, request);
+      if (!sessionUserId) {
+        return new Response(JSON.stringify({ error: "Unauthorized" }), {
+          status: 401,
+          headers: corsHeaders,
+        });
+      }
+      if (sessionUserId !== id) {
+        return new Response(JSON.stringify({ error: "Forbidden" }), {
+          status: 403,
+          headers: corsHeaders,
+        });
+      }
+
       const body = (await request.json()) as any;
       const now = Math.floor(Date.now() / 1000);
 

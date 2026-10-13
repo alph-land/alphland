@@ -79,7 +79,6 @@ interface DappListItem {
 function getDeveloperName(data: DappData): string {
   const team = data.teamInfo;
   if (team?.name) return team.name;
-  if (team?.contactEmail) return team.contactEmail;
   return `${data.name} Team`;
 }
 

@@ -64,3 +64,22 @@ export function formatRewardAmount(amount: number, token: string): string {
 export function formatUSDAmount(amount: number): string {
   return `$${amount.toLocaleString()}`;
 }
+
+/**
+ * One-line reward label for lists. A USD-denominated bounty promises the USD
+ * figure and its ALPH amount is re-derived at each daily valuation, so it
+ * leads with USD and marks ALPH as approximate. Everything else promises the
+ * ALPH amount and shows only that.
+ */
+export function formatBountyReward(r: {
+  denomination?: string | null;
+  amount: number;
+  token?: string | null;
+  usd?: number | null;
+}): string {
+  const token = r.token || "ALPH";
+  if (r.denomination === "usd" && r.usd) {
+    return `${formatUSDAmount(r.usd)} (≈ ${formatRewardAmount(Math.round(r.amount), token)})`;
+  }
+  return formatRewardAmount(r.amount, token);
+}

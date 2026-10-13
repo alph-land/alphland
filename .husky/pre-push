@@ -24,7 +24,7 @@ while read -r local_ref local_sha remote_ref remote_sha; do
   changed=$(git diff --name-only "$base" "$local_sha" 2>/dev/null)
   [ -z "$changed" ] && continue
 
-  non_dapp_changes=$(printf '%s\n' "$changed" | grep -vE '^(data/[^/]+\.json|public/dapps/.*)$')
+  non_dapp_changes=$(printf '%s\n' "$changed" | grep -vE '^(data/[^/]+\.json|public/dapps/.*)$' || true)
   if [ -n "$non_dapp_changes" ]; then
     run_tests=1
   fi

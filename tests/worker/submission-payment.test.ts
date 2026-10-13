@@ -67,6 +67,12 @@ function makeEnv(opts: {
   return { env: { DB } as any, updates };
 }
 
+// Distinct well-formed hashes; the handler rejects anything that is not
+// 64 hex characters before it reaches the database.
+const HASH_A = "a".repeat(64);
+const HASH_B = "b".repeat(64);
+const HASH_C = "c".repeat(64);
+
 const review = (env: any, body: any) =>
   handleSubmissionsAPI(
     new Request("https://x/api/submissions/sub1", {
@@ -109,7 +115,7 @@ describe("PUT /api/submissions/:id — reused transaction hash", () => {
 
     const res = await review(env, {
       status: "approved",
-      transaction_hash: "already-spent-hash",
+      transaction_hash: HASH_A,
     });
 
     expect(res.status).toBe(409);
@@ -123,7 +129,7 @@ describe("PUT /api/submissions/:id — reused transaction hash", () => {
         "UNIQUE constraint failed: bounty_submissions.transaction_hash",
     });
     const body = await (
-      await review(env, { status: "approved", transaction_hash: "dup" })
+      await review(env, { status: "approved", transaction_hash: HASH_B })
     ).json();
 
     expect(body.error).toMatch(/transaction hash/i);
@@ -133,7 +139,7 @@ describe("PUT /api/submissions/:id — reused transaction hash", () => {
   it("still surfaces unrelated database errors instead of masking them as 409", async () => {
     const { env } = makeEnv({ updateError: "database is locked" });
     await expect(
-      review(env, { status: "approved", transaction_hash: "h" }),
+      review(env, { status: "approved", transaction_hash: HASH_C }),
     ).rejects.toThrow("database is locked");
   });
 
@@ -141,19 +147,58 @@ describe("PUT /api/submissions/:id — reused transaction hash", () => {
     const { env, updates } = makeEnv({});
     const res = await review(env, {
       status: "approved",
-      transaction_hash: "fresh-hash",
+      transaction_hash: HASH_A,
       reward_amount: "500",
     });
 
     expect(res.status).toBe(200);
     expect(updates).toHaveLength(1);
-    expect(updates[0]).toContain("fresh-hash");
+    expect(updates[0]).toContain(HASH_A);
   });
 
   it("does not touch the hash when rejecting a submission", async () => {
     const { env, updates } = makeEnv({});
     const res = await review(env, { status: "rejected" });
 
+    expect(res.status).toBe(200);
+    expect(updates[0]?.[2]).toBeNull(); // transaction_hash bind
+  });
+});
+
+describe("PUT /api/submissions/:id — hash is stored in one canonical form", () => {
+  it("lowercases and trims, so case variants hit the same unique index entry", async () => {
+    // The explorer accepts either case. Stored as typed, "ABC…" and "abc…"
+    // were two index keys for one payment.
+    const { env, updates } = makeEnv({});
+    const res = await review(env, {
+      status: "approved",
+      transaction_hash: `  ${HASH_A.toUpperCase()}\n`,
+      reward_amount: "500",
+    });
+
+    expect(res.status).toBe(200);
+    expect(updates[0]).toContain(HASH_A);
+    expect(updates[0]).not.toContain(HASH_A.toUpperCase());
+  });
+
+  it("rejects a malformed hash before touching the database", async () => {
+    const { env, updates } = makeEnv({});
+    for (const bad of ["dup", "g".repeat(64), "a".repeat(63), "0x" + HASH_A]) {
+      const res = await review(env, {
+        status: "approved",
+        transaction_hash: bad,
+      });
+      expect(res.status).toBe(400);
+    }
+    expect(updates).toHaveLength(0);
+  });
+
+  it("treats a blank hash as none, not as a value to index", async () => {
+    const { env, updates } = makeEnv({});
+    const res = await review(env, {
+      status: "approved",
+      transaction_hash: "  ",
+    });
     expect(res.status).toBe(200);
     expect(updates[0]?.[2]).toBeNull(); // transaction_hash bind
   });

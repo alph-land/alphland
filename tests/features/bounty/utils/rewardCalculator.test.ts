@@ -3,6 +3,7 @@ import {
   TIER_PERCENTAGES_10,
   TIER_PERCENTAGES_3,
   TIER_PERCENTAGES_5,
+  formatBountyReward,
   formatRewardAmount,
   formatUSDAmount,
   generateTieredRewards,
@@ -87,5 +88,30 @@ describe("formatUSDAmount", () => {
 
   it("handles zero", () => {
     expect(formatUSDAmount(0)).toBe("$0");
+  });
+});
+
+describe("formatBountyReward", () => {
+  it("leads with USD for a USD-denominated bounty and marks ALPH approximate", () => {
+    expect(
+      formatBountyReward({
+        denomination: "usd",
+        amount: 24999.6,
+        token: "ALPH",
+        usd: 1000,
+      }),
+    ).toBe(`$${(1000).toLocaleString()} (≈ ${(25000).toLocaleString()} ALPH)`);
+  });
+
+  it("shows only ALPH for an ALPH-denominated bounty, even with a USD value", () => {
+    expect(
+      formatBountyReward({ denomination: "alph", amount: 500, usd: 20 }),
+    ).toBe(`${(500).toLocaleString()} ALPH`);
+  });
+
+  it("falls back to ALPH when a USD bounty has no USD figure yet", () => {
+    expect(
+      formatBountyReward({ denomination: "usd", amount: 500, usd: null }),
+    ).toBe(`${(500).toLocaleString()} ALPH`);
   });
 });
