@@ -1,0 +1,40 @@
+{
+  "name": "ℵ Central Station",
+  "description": "Watch Alephium in real time as a pixel-art train station. Every block is a train and every transaction is a passenger who boards it. The 4 platforms are Alephium’s 4 groups. Spot whales, token carriers and contract calls, follow the miner on every train, and click any passenger or train to open it in the explorer. Search a tx hash or address to find your own passenger. Live data comes from a full-node WebSocket, and there’s also a neon metro map view.”",
+  "short_description": "Alephium live as a pixel-art train station",
+  "tags": [
+    "Analytics",
+    "Education",
+    "Tools"
+  ],
+  "verified": false,
+  "dotw": false,
+  "councils_choice": false,
+  "links": {
+    "website": "https://github.com/adeolu05/alph-visualizer-",
+    "careers": "",
+    "twitter": "",
+    "telegram": "",
+    "discord": "",
+    "docs": "",
+    "github": "",
+    "youtube": "",
+    "medium": "",
+    "mirror": "",
+    "linkedin": ""
+  },
+  "twitterName": "",
+  "teamInfo": {
+    "contactEmail": "hello@dpeluola.com",
+    "founded": "2026-10-06T00:00:00.000Z",
+    "anonymous": false
+  },
+  "media": {
+    "logoUrl": "/dapps/central-station/central-station-logo.webp",
+    "bannerUrl": "/dapps/central-station/central-station-banner.webp",
+    "previewUrl": "/dapps/central-station/central-station-preview.webp"
+  },
+  "contracts": [],
+  "audits": [],
+  "tokens": []
+}
