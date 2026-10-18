@@ -1,0 +1,38 @@
+{
+  "name": "WebSport",
+  "description": "WebSport is a crypto sportsbook for sports and esports. Users can connect a wallet, browse pre-match fixtures and markets, and place bets using supported digital assets. Explore football, basketball, tennis, and esports markets, manage your balance, and follow your bets in one place.",
+  "short_description": "A crypto sportsbook for sports and esports.",
+  "tags": [
+    "Games"
+  ],
+  "verified": false,
+  "dotw": false,
+  "councils_choice": false,
+  "links": {
+    "website": "https://websport.io",
+    "careers": "",
+    "twitter": "https://twitter.com/Websportio",
+    "telegram": "https://t.me/websportio",
+    "discord": "",
+    "docs": "",
+    "github": "https://github.com/websportio",
+    "youtube": "",
+    "medium": "",
+    "mirror": "",
+    "linkedin": ""
+  },
+  "twitterName": "",
+  "teamInfo": {
+    "contactEmail": "",
+    "founded": "",
+    "anonymous": true
+  },
+  "media": {
+    "logoUrl": "/dapps/websport/websport-logo.webp",
+    "bannerUrl": "/dapps/websport/websport-banner.webp",
+    "previewUrl": "/dapps/websport/websport-preview.webp"
+  },
+  "contracts": [],
+  "audits": [],
+  "tokens": []
+}
