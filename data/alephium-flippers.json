@@ -1,0 +1,38 @@
+{
+  "name": "Alephium Flippers",
+  "description": "Alephium Flippers is a card game where you bid on 30 absurd properties, then sell them off for checks, against bots or friends, for free or for ALPH. \n\nEach of the 30 house cards is also a one-of-one NFT on Alephium that you can buy and sell on the collection page.",
+  "short_description": "Card auction game for absurd houses, for fun or ALPH.",
+  "tags": [
+    "Games"
+  ],
+  "verified": false,
+  "dotw": false,
+  "councils_choice": false,
+  "links": {
+    "website": "https://alephium-flippers.catgames.workers.dev",
+    "careers": "",
+    "twitter": "https://x.com/CatCorpGames",
+    "telegram": "https://t.me/CatCorpGames",
+    "discord": "",
+    "docs": "",
+    "github": "",
+    "youtube": "",
+    "medium": "",
+    "mirror": "",
+    "linkedin": ""
+  },
+  "twitterName": "CatCorpGames",
+  "teamInfo": {
+    "contactEmail": "",
+    "founded": "2026-10-18T00:00:00.000Z",
+    "anonymous": false
+  },
+  "media": {
+    "logoUrl": "/dapps/alephium-flippers/alephium-flippers-logo.webp",
+    "bannerUrl": "/dapps/alephium-flippers/alephium-flippers-banner.webp",
+    "previewUrl": "/dapps/alephium-flippers/alephium-flippers-preview.webp"
+  },
+  "contracts": [],
+  "audits": [],
+  "tokens": []
+}
