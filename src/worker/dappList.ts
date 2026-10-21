@@ -8,7 +8,6 @@ import alephiumBridge from "../../data/alephium-bridge.json";
 import alephiumExplorer from "../../data/alephium-explorer.json";
 import alephiumOfficialWallets from "../../data/alephium-official-wallets.json";
 import powfi from "../../data/powfi.json";
-import alphbanx from "../../data/alphbanx.json";
 import alphpad from "../../data/alphpad.json";
 import alph2048Arena from "../../data/alph-2048-arena.json";
 import aura from "../../data/aura.json";
@@ -89,7 +88,6 @@ const RAW: DappData[] = [
   alephiumOfficialWallets,
   powfi,
   // Spotlight
-  alphbanx,
   alphpad,
   alph2048Arena,
   aura,
