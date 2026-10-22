@@ -299,6 +299,15 @@
       "language": "English"
     }
   ],
+  "alephium-flippers": [
+    {
+      "title": "Alephium Flippers | Launch Trailer",
+      "link": "https://youtu.be/uYzuFyB7It0",
+      "format": "Video",
+      "topic": "Other",
+      "language": "English"
+    }
+  ],
   "_general": [
     {
       "title": "Starting an Alephium Devnet Node & Local Explorer",
