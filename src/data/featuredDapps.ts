@@ -8,7 +8,6 @@ export const BY_ALEPHIUM_DAPPS = [
 
 // Featured dApps slugs - handpicked for the spotlight section (A→Z)
 export const FEATURED_DAPPS = [
-  "alephium-flippers",
   "alphpad",
   "alph-2048-arena",
   "aura",
@@ -27,4 +26,5 @@ export const FEATURED_DAPPS = [
   "safepal-wallet",
   "tangem-wallet",
   "alephium-detectives",
+  "alephium-flippers",
 ];
