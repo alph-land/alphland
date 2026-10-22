@@ -1,0 +1,38 @@
+{
+  "name": "Alph Watch",
+  "description": "A notification system for monitoring Alephium wallets. Can monitor any wallet, any token and get Telegram or Discord notifications when there is any movement in or out of wallet. You can set limits to only be notified above a threshold. \n\nPrivate accounts with Passkey or Alephium wallet login. No email required.",
+  "short_description": "ALPH Wallet Monitoring",
+  "tags": [
+    "Tools"
+  ],
+  "verified": false,
+  "dotw": false,
+  "councils_choice": false,
+  "links": {
+    "website": "https://watch.alphnexus.org",
+    "careers": "",
+    "twitter": "",
+    "telegram": "",
+    "discord": "",
+    "docs": "",
+    "github": "",
+    "youtube": "",
+    "medium": "",
+    "mirror": "",
+    "linkedin": ""
+  },
+  "twitterName": "",
+  "teamInfo": {
+    "contactEmail": "",
+    "founded": "",
+    "anonymous": true
+  },
+  "media": {
+    "logoUrl": "/dapps/alph-watch/alph-watch-logo.webp",
+    "bannerUrl": "/dapps/alph-watch/alph-watch-banner.webp",
+    "previewUrl": "/dapps/alph-watch/alph-watch-preview.webp"
+  },
+  "contracts": [],
+  "audits": [],
+  "tokens": []
+}
