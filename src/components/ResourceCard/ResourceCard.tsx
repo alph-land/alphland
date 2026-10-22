@@ -65,6 +65,7 @@ const ResourceCard = ({ resource, dappBannerUrl }: ResourceCardProps) => {
             src={resource.ogImage!}
             alt={resource.title}
             layout="fill"
+            unoptimized
             objectFit="cover"
             className="transition-transform duration-300 group-hover:scale-105"
           />
