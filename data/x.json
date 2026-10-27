@@ -1,0 +1,38 @@
+{
+  "name": "x",
+  "description": "y",
+  "short_description": "z",
+  "tags": [
+    "DeFi"
+  ],
+  "verified": false,
+  "dotw": false,
+  "councils_choice": false,
+  "links": {
+    "website": "https://example.com",
+    "careers": "",
+    "twitter": "",
+    "telegram": "",
+    "discord": "",
+    "docs": "",
+    "github": "",
+    "youtube": "",
+    "medium": "",
+    "mirror": "",
+    "linkedin": ""
+  },
+  "twitterName": "",
+  "teamInfo": {
+    "contactEmail": "",
+    "founded": "",
+    "anonymous": false
+  },
+  "media": {
+    "logoUrl": "/dapps/x/x-logo.webp",
+    "bannerUrl": "/dapps/x/x-banner.webp",
+    "previewUrl": "/dapps/x/x-preview.webp"
+  },
+  "contracts": [],
+  "audits": [],
+  "tokens": []
+}
