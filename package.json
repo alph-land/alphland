@@ -90,5 +90,8 @@
   },
   "resolutions": {
     "styled-components": "^5"
+  },
+  "overrides": {
+    "sharp": "^0.35.5"
   }
 }
