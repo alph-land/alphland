@@ -11,7 +11,7 @@ import powfi from "../../data/powfi.json";
 import alphpad from "../../data/alphpad.json";
 import alph2048Arena from "../../data/alph-2048-arena.json";
 import aura from "../../data/aura.json";
-import chainReaction from "../../data/chain-reaction.json";
+import alphscoundrel from "../../data/alphscoundrel.json";
 import deadrare from "../../data/deadrare.json";
 import dia from "../../data/dia.json";
 import elexium from "../../data/elexium.json";
@@ -22,11 +22,12 @@ import linxApp from "../../data/linx-app.json";
 import moonshotboxes from "../../data/moonshotboxes.json";
 import nightshade from "../../data/nightshade.json";
 import onekeyWallet from "../../data/onekey-wallet.json";
-import presenceprotocol from "../../data/presenceprotocol.json";
+import alephiumFlippers from "../../data/alephium-flippers.json";
 import safepalWallet from "../../data/safepal-wallet.json";
 import tangemWallet from "../../data/tangem-wallet.json";
 import alephiumDetectives from "../../data/alephium-detectives.json";
-import alephiumFlippers from "../../data/alephium-flippers.json";
+import presenceprotocol from "../../data/presenceprotocol.json";
+import chainReaction from "../../data/chain-reaction.json";
 
 export interface DappData {
   name: string;
@@ -92,7 +93,7 @@ const RAW: DappData[] = [
   alphpad,
   alph2048Arena,
   aura,
-  chainReaction,
+  alphscoundrel,
   deadrare,
   dia,
   elexium,
@@ -103,11 +104,12 @@ const RAW: DappData[] = [
   moonshotboxes,
   nightshade,
   onekeyWallet,
-  presenceprotocol,
+  alephiumFlippers,
   safepalWallet,
   tangemWallet,
   alephiumDetectives,
-  alephiumFlippers,
+  presenceprotocol,
+  chainReaction,
 ];
 
 const seen = new Set<string>();
