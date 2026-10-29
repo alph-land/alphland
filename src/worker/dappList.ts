@@ -27,6 +27,7 @@ import safepalWallet from "../../data/safepal-wallet.json";
 import tangemWallet from "../../data/tangem-wallet.json";
 import alephiumDetectives from "../../data/alephium-detectives.json";
 import alephiumFlippers from "../../data/alephium-flippers.json";
+import alphscoundrel from "../../data/alphscoundrel.json";
 
 export interface DappData {
   name: string;
@@ -108,6 +109,7 @@ const RAW: DappData[] = [
   tangemWallet,
   alephiumDetectives,
   alephiumFlippers,
+  alphscoundrel,
 ];
 
 const seen = new Set<string>();

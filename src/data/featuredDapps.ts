@@ -27,4 +27,5 @@ export const FEATURED_DAPPS = [
   "tangem-wallet",
   "alephium-detectives",
   "alephium-flippers",
+  "alphscoundrel",
 ];
