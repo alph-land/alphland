@@ -20,7 +20,6 @@ import learnify from "../../data/learnify.json";
 import ledgerWallet from "../../data/ledger-wallet.json";
 import linxApp from "../../data/linx-app.json";
 import moonshotboxes from "../../data/moonshotboxes.json";
-import nightshade from "../../data/nightshade.json";
 import onekeyWallet from "../../data/onekey-wallet.json";
 import alephiumFlippers from "../../data/alephium-flippers.json";
 import safepalWallet from "../../data/safepal-wallet.json";
@@ -102,7 +101,6 @@ const RAW: DappData[] = [
   ledgerWallet,
   linxApp,
   moonshotboxes,
-  nightshade,
   onekeyWallet,
   alephiumFlippers,
   safepalWallet,

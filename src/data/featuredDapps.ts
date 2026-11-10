@@ -20,7 +20,6 @@ export const FEATURED_DAPPS = [
   "ledger-wallet",
   "linx-app",
   "moonshotboxes",
-  "nightshade",
   "onekey-wallet",
   "alephium-flippers",
   "safepal-wallet",
